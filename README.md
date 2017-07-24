@@ -2,16 +2,30 @@
 
 Still in early development.
 
+
 ## Overview
 
-Ginette is my personal voice assistant powered by Python.
+Ginette is my always-on personal voice assistant powered by Python.
+
+It features:
 
  - **Offline** speech recognition/keyword spotting thanks to [CMUSphinx](https://cmusphinx.github.io/)
  - Supports multiple language (mine is configured in French)
 
-## Hardware
+
+## My Hardware
 
  - [Raspberry Pi 3 Model B](https://www.raspberrypi.org/products/raspberry-pi-3-model-b/)
  - [Respeaker Mic Array](https://www.seeedstudio.com/ReSpeaker-Mic-Array-Far-field-w%2F-7-PDM-Microphones-p-2719.html)
  - [BlinkM](https://thingm.com/products/blinkm/)
- - s SHT30 Humidity and Temperature Sensor
+
+## Requirements
+
+ - mpg321
+
+## Roadmap / Ideas
+
+ - Make `Module` export API endpoint
+ - "smart" summary (with `went-there`)
+ - multiple devices support (e.g. radio switching room when detecting movement with PIR?)
+ - a web UI?
