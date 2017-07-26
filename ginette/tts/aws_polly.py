@@ -2,13 +2,13 @@ import abc
 from subprocess import Popen, PIPE
 
 import requests
-from ginette.audio.utils import play
 
 
 class TTSEngine(object):
     __metaclass__ = abc.ABCMeta
 
-    def __init__(self, config=None):
+    def __init__(self, player, config=None):
+        self.player = player
         self.config = config or {}
 
     @abc.abstractmethod
@@ -16,7 +16,7 @@ class TTSEngine(object):
         pass
 
     def text_to_speech(self, text):
-        return play(text)
+        return self.player.play_mp3(self.do_text_to_speech(text))
 
 
 class HTTPolly(TTSEngine):

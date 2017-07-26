@@ -25,7 +25,8 @@ It features:
 
 ## Roadmap / Ideas
 
- - Make `Module` export API endpoint
- - "smart" summary (with `went-there`)
+ - IKEA TRÅDFRI gateway module
+ - ability to gather data from sensors
+ - "smart" summary (with `went-there`) module
  - multiple devices support (e.g. radio switching room when detecting movement with PIR?)
  - a web UI?

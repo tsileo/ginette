@@ -11,7 +11,7 @@ class AudioPlayer(object):
     def __init__(self, config=None):
         self.config = config = {}
 
-    def play_mp3(data):
+    def play_mp3(self, data):
         """Play the given mp3 bytes."""
         p = Popen(['mpg321', '-'], stdin=PIPE, stderr=PIPE)
         p.communicate(input=data)

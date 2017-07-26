@@ -53,8 +53,12 @@ class BlinkM(object):
             bus.write_byte(self.addr, STOP_SCRIPT)
 
     def reset(self):
-        self.stop_script()
-        self.fade_to()
+        with I2C() as bus:
+            bus.write_byte(self.addr, STOP_SCRIPT)
+            bus.write_byte(self.addr, FADE_TO_RGB)
+            bus.write_byte(self.addr, 0)
+            bus.write_byte(self.addr, 0)
+            bus.write_byte(self.addr, 0)
 
     def fade_to(self, r=0, g=0, b=0):
         with I2C() as bus:
