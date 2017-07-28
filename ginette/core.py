@@ -26,6 +26,10 @@ class GinetteError(Exception):
     """Base `Exception` for all Ginette related error."""
 
 
+# TODO(tsileo): also load stt_engine and tss_engine from config 
+# TODO(tsileo): hooks for the led
+
+
 class Ginette(object):
     def __init__(self, stt_engine_cls, tts_engine_cls, ctx_hook=None):
         self.stt_engine_cls = stt_engine_cls
@@ -50,20 +54,24 @@ class Ginette(object):
         return time() - self.last_wakeup
 
     def start(self):
-        stream = AudioStream({'device_nam': 'respeaker'})
-        self.stt_engine = self.stt_engine_cls(stream)
+        stream = AudioStream()
+        self.stt_engine = self.stt_engine_cls()
+        self.stt_engine.set_stream(stream)
         while 1:
             ctx = Context(self.tts_engine, self.stt_engine, stream)
             if callable(self.ctx_hook):
                 self.ctx_hook(ctx)
+
             print('keyphrase spotting')
             self.stt_engine.keyphrase_spotting_mode()
             # TODO detect_hotword (with a custom abc)?
             out = self.stt_engine.detect()
             self.wakeup()
+
             self.stt_engine.lm_mode()
             out = self.stt_engine.detect(timeout=5)
             ctx.set_hypstr(out[0])
+
             for module in self.modules:
                 if module.match(ctx):
                     module.do(ctx)

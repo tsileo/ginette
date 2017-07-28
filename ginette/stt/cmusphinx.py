@@ -7,6 +7,8 @@ import abc
 # from pocketshpinx.pocketsphinx import Decoder
 from pocketsphinx.pocketsphinx import *
 
+from ginette.config import WithConfig
+
 log = logging.getLogger('ginette.stt.cmusphinx')
 
 
@@ -16,8 +18,12 @@ lm = '/home/pi/fr-small.lm.bin'
 dic = os.path.join(model_dir, "/home/pi/fr2.dic")
 
 
-class STTEngine(object):
+class STTEngine(WithConfig):
     __metaclass__ = abc.ABCMeta
+
+    @abc.abstractmethod
+    def set_stream(self, stream):
+        pass
 
     @abc.abstractmethod
     def detect(self, timeout=None):
@@ -25,12 +31,13 @@ class STTEngine(object):
 
 
 class CMUSphinx(STTEngine):
-    def __init__(self, stream, config=None):
-        self.config = config or {}
+    def init(self):
         self._decoder = self.get_pocketsphinx_decoder()
         self._decoder.set_kws('keyword', '/home/pi/kwd.txt')
         self._decoder.set_kws('keyword_stop', '/home/pi/kwd2.txt')
         self._decoder.set_lm_file('lm', lm)
+
+    def set_stream(self, stream):
         self._stream = stream
 
     def get_pocketsphinx_decoder(self):

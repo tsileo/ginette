@@ -19,6 +19,17 @@ class Config(object):
             raise Exception('config must be loaded first')
 
     @classmethod
-    def module(cls, name):
+    def get(cls, name, default=None):
         cls._check_loaded()
-        return cls.ROOT.get('modules', {}).get(name)
+        return cls.ROOT.get(name, default)
+
+    @classmethod
+    def module(cls, name, default=None):
+        cls._check_loaded()
+        return cls.ROOT.get('modules', {}).get(name, default)
+
+
+class WithConfig(object):
+    def __init__(self):
+        self.config = Config.get(self.__class__.__name__)
+        self.init()

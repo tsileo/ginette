@@ -3,13 +3,12 @@ import logging
 
 import pyaudio
 
+from ginette.config import WithConfig
+
 log = logging.getLogger('ginette.audio')
 
 
 class AudioPlayer(object):
-
-    def __init__(self, config=None):
-        self.config = config = {}
 
     def play_mp3(self, data):
         """Play the given mp3 bytes."""
@@ -18,10 +17,9 @@ class AudioPlayer(object):
         p.wait()
 
 
-class AudioStream(object):
+class AudioStream(WithConfig):
 
-    def __init__(self, config=None):
-        self.config = config or {}
+    def init(self):
         self.pyaudio = pyaudio.PyAudio()
         self.device_name = self.config.get('device_name')
         self._stream = None
