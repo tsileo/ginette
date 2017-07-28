@@ -3,12 +3,16 @@ from subprocess import Popen, PIPE
 
 import requests
 
+from ginette.audio import AudioPlayer
+
+
+PLAYER = AudioPlayer()
 
 class TTSEngine(object):
     __metaclass__ = abc.ABCMeta
 
-    def __init__(self, player, config=None):
-        self.player = player
+    def __init__(self, player=None, config=None):
+        self.player = player or PLAYER
         self.config = config or {}
 
     @abc.abstractmethod

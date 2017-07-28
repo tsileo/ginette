@@ -8,13 +8,13 @@ AVAILABLE_MODULES = {}
 
 
 class Context(object):
-    def __init__(self, tts):
-        self.tts = tts
-
-    def build(self, hypstr, engine, stream):
-        self.hypstr = hypstr
-        self.engine = engine
+    def __init__(self, tts, stt, stream):
+        self.tts_engine = tts
+        self.stt_engine = stt
         self.stream = stream
+
+    def set_hypstr(self, hypstr):
+        self.hypstr = hypstr
 
 
 class _ModuleMeta(type):
@@ -58,7 +58,7 @@ class Temperature(Module):
 
     def do(self, ctx):
         temp, humid = ctx.sht30.get_temp_and_humid()
-        ctx.tts.text_to_speech(
+        ctx.tts_engine.text_to_speech(
             'La temp\xc3\xa9rature {} est de {:.2f} degr\xc3\xa9'.format(self.config.get('name'), temp)
         )
         print('done')
@@ -73,7 +73,7 @@ class Time(Module):
 
     def do(self, ctx):
         now = datetime.now()
-        ctx.tts.text_to_speech(
+        ctx.tts_engine.text_to_speech(
             'Il est {} heures et {} minutes'.format(
                 now.strftime('%H').lstrip('0'),
                 now.strftime('%M').lstrip('0'),
