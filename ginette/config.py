@@ -30,6 +30,23 @@ class Config(object):
 
 
 class WithConfig(object):
+    REQUIRED_KEYS = []
+
     def __init__(self):
         self.config = Config.get(self.__class__.__name__)
+
+        missing_keys = []
+        if self.REQUIRED_KEYS and self.config is None:
+            missing_keys = list(self.REQUIRED_KEYS)
+
+        for key in self.REQUIRED_KEYS:
+            if not key in self.config:
+                missing_keys.append(key)
+
+        if missing_keys:
+            raise GinetteError('the following config items are missing for {}: {}'.format(
+                ''.join(missing_keys),
+                self.__class__.__name__,
+            ))
+
         self.init()

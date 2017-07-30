@@ -12,13 +12,8 @@ from ginette.config import WithConfig
 log = logging.getLogger('ginette.stt.cmusphinx')
 
 
-model_dir = "/home/pi/cmusphinx-fr-ptm-5.2/"
-hmm = model_dir
-lm = '/home/pi/fr-small.lm.bin'
-dic = os.path.join(model_dir, "/home/pi/fr2.dic")
-
-
 class STTEngine(WithConfig):
+    """Abstract class for Speech To Text engine."""
     __metaclass__ = abc.ABCMeta
 
     @abc.abstractmethod
@@ -31,31 +26,32 @@ class STTEngine(WithConfig):
 
 
 class CMUSphinx(STTEngine):
+    """https://cmusphinx.github.io/ STT engine using https://github.com/cmusphinx/pocketsphinx-python"""
+
+    REQUIRED_KEYS = ['hmm_path', 'lm_path', 'dict_path', 'keyword_path']
+
     def init(self):
         self._decoder = self.get_pocketsphinx_decoder()
-        self._decoder.set_kws('keyword', '/home/pi/kwd.txt')
-        self._decoder.set_kws('keyword_stop', '/home/pi/kwd2.txt')
-        self._decoder.set_lm_file('lm', lm)
+        self._decoder.set_kws('keyword', self.config.get('keyword_path'))
+        self._decoder.set_lm_file('lm', self.config.get('lm_path'))
 
     def set_stream(self, stream):
         self._stream = stream
 
     def get_pocketsphinx_decoder(self):
         config = Decoder.default_config()
-        config.set_string('-hmm', hmm)
-        config.set_string('-lm', lm)
-        config.set_string('-dict', dic)
-        config.set_string('-logfn', '/dev/null')
+        config.set_string('-hmm', self.config.get('hmm_path'))
+        config.set_string('-lm', self.config.get('lm_path'))
+        config.set_string('-dict', self.config.get('dict_path'))
         config.set_int('-nfft', 512)
         config.set_float('-vad_threshold', 3.4)
+        if not self.config.get('debug'):
+            config.set_string('-logfn', '/dev/null')
 
         return Decoder(config)
 
     def keyphrase_spotting_mode(self):
         self._decoder.set_search('keyword')
-
-    def keyphrase_stop_mode(self):
-        self._decoder.set_search('keyword_stop')
 
     def lm_mode(self):
         self._decoder.set_search('lm')

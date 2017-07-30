@@ -6,9 +6,9 @@ from datetime import datetime
 
 from pocketsphinx.pocketsphinx import *
 import pyaudio
+from ginette import GinetteError
 from ginette.audio import AudioStream
 from ginette.audio import AudioPlayer
-from ginette.stt.cmusphinx import CMUSphinx
 from ginette.config import Config
 from ginette.modules import AVAILABLE_MODULES
 from ginette.modules import Time
@@ -20,10 +20,6 @@ from ginette.i2c.blinkm import BlinkMScripts
 # from ginette.tts.aws_polly import HTTPolly
 
 log = logging.getLogger('ginette.core')
-
-
-class GinetteError(Exception):
-    """Base `Exception` for all Ginette related error."""
 
 
 # TODO(tsileo): also load stt_engine and tss_engine from config 

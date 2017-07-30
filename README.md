@@ -1,4 +1,4 @@
-# Ok Ginette
+# Ginette
 
 Still in early development.
 
