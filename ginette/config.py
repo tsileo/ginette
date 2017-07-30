@@ -1,5 +1,7 @@
 import yaml
 
+from ginette import GinetteError
+
 
 class Config(object):
     """Config singleton"""
@@ -45,8 +47,8 @@ class WithConfig(object):
 
         if missing_keys:
             raise GinetteError('the following config items are missing for {}: {}'.format(
-                ''.join(missing_keys),
                 self.__class__.__name__,
+                ', '.join(missing_keys),
             ))
 
         self.init()
